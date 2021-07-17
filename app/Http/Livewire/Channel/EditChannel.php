@@ -12,4 +12,9 @@ class EditChannel extends Component
     {
         return view('livewire.channel.edit-channel');
     }
+
+    public function submit()
+    {
+        dd('submitted');
+    }
 }
