@@ -3,10 +3,13 @@
 namespace App\Http\Livewire\Channel;
 
 use App\Models\Channel;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Livewire\Component;
 
 class EditChannel extends Component
 {
+    use AuthorizesRequests;
+
     public $channel;
 
     protected function rules()
@@ -30,6 +33,7 @@ class EditChannel extends Component
 
     public function update()
     {
+        $this->authorize('update', $this->channel);
         $this->validate();
 
         $this->channel->update([
