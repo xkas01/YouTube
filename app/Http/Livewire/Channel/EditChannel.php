@@ -4,6 +4,7 @@ namespace App\Http\Livewire\Channel;
 
 use App\Models\Channel;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Intervention\Image\Facades\Image;
 use Livewire\Component;
 
 class EditChannel extends Component
@@ -48,10 +49,17 @@ class EditChannel extends Component
         if ($this->image) {
             //save the image
             $image = $this->image->storeAs('images', $this->channel->uid . '.png');
+            $imageName = explode('/', $image)[1];
+            //resize and convert to png
+            $img = Image::make(storage_path() . '/app/' . $image)
+                ->encode('png')
+                ->fit(80, 80, function ($constraint) {
+                    $constraint->upsize();
+                })->save();
 
             //update file path in the db
             $this->channel->update([
-                'image' => $image
+                'image' => $imageName
             ]);
         }
 
